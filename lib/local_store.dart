@@ -134,12 +134,10 @@ class LocalStore extends ChangeNotifier {
   bool get canDownload => !locked && (profile.admin || profile.download);
   bool allowsSource(String source) =>
       !locked &&
-      SourceSite.isAvailable(source) &&
-      profile.allows(source) &&
-      (_gateOff || _sourcesUnlocked || SourceSite.isPrimary(source));
-  List<SourceSite> get sources => SourceSite.visibleValues(
-    unlocked: _gateOff || _sourcesUnlocked,
-  ).where((site) => allowsSource(site.id)).toList();
+      SourceSite.isAvailable(source);
+
+  List<SourceSite> get sources =>
+    SourceSite.values.where((site) => allowsSource(site.id)).toList();
 
   /// 默认隐藏的站源是否已解锁。解锁状态只在本次运行内有效，重启后恢复隐藏。
   bool get sourcesUnlocked => _gateOff || _sourcesUnlocked;
